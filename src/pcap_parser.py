@@ -109,8 +109,7 @@ class PcapParser:
             features.update(calc_stats(pd.Series(dtype=float), 'in_iat'))
 
         # 4. Bursts
-        # Basic logic: a burst ends when direction changes
-        # Use pandas shift to find where direction != prev_direction
+
         if not df.empty:
             df['burst_id'] = (df['dir'] != df['dir'].shift()).cumsum()
             

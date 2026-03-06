@@ -3,9 +3,9 @@ import random
 
 class BuFLOShim:
     def __init__(self, interval=0.02, size=1400, min_len=2.0):
-        self.interval = interval   # 20ms usually
-        self.size = size           # target packet size
-        self.min_len = min_len     # min defense duration
+        self.interval = interval   
+        self.size = size          
+        self.min_len = min_len    
 
     def apply(self, packets):
         """
@@ -27,22 +27,13 @@ class BuFLOShim:
         defended = []
         curr_time = start
         
-        # Buffer for real traffic
-        # Simple FIFO queue
+
         q = packets[:] # copy
         
-        # Number of slots to simulate
         steps = int(np.ceil(dur / self.interval))
         
-        for i in range(steps + 5): # slightly longer to flush
+        for i in range(steps + 5): 
             now = start + (i * self.interval)
-            
-            # See what's arrived in the buffer by 'now'
-            # (In simulation we have them all, just check timestamps)
-            
-            # Basically, if we have a real packet ready, we simulate sending it (padded).
-            # If not, we send a dummy.
-            # Real BuFLO aggregates bytes, but let's stick to 1-to-1 or dummy for this level of emulation.
             
             # Find next valid packet
             has_packet = False
@@ -53,8 +44,7 @@ class BuFLOShim:
                 has_packet = True
             
             if has_packet:
-                # Send real packet, padded to fixed size
-                # Direction is preserved
+               
                 p = {
                     'ts': now,
                     'size': self.size,
@@ -64,8 +54,7 @@ class BuFLOShim:
                 }
             else:
                 # Send dummy
-                # Usually dummies are outgoing padding? or bidirectional?
-                # Let's assume dummy outgoing
+    
                 p = {
                     'ts': now,
                     'size': self.size,
